@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vehicle Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table img { width: 100px; height: auto; }
+  </style>
+</head>
+<body>
+  <h2>Race Vehicle Dashboard</h2>
+  <table id="vehicleTable" class="display">
+    <thead>
+      <tr>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Series</th>
+        <th>Year</th>
+        <th>Image</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $.get("vehicle_data_for_dashboard.csv", function (data) {
+        const lines = data.trim().split("\n").slice(1); // Skip header
+        lines.forEach(line => {
+          const [vehicle, make, model, series, year, imageURL] = line.split(",");
+          $('#vehicleTable tbody').append(`
+            <tr>
+              <td>${make}</td>
+              <td>${model}</td>
+              <td>${series}</td>
+              <td>${year || ''}</td>
+              <td>${imageURL ? `<img src="${imageURL}" alt="car">` : 'N/A'}</td>
+            </tr>
+          `);
+        });
+        $('#vehicleTable').DataTable();
+      });
+    });
+  </script>
+</body>
+</html>
